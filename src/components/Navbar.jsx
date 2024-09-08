@@ -46,7 +46,7 @@ const Navbar = () => {
             <img
               src={thirdweb}
               alt="user"
-              className="w-[60%] h-[60%] object-contain"
+              className="w-[60%] h-[60%] rounded-full object-cover"
             />
           </div>
         </Link>
@@ -58,7 +58,7 @@ const Navbar = () => {
           <img
             src={logo}
             alt="user"
-            className="w-[60%] h-[60%] object-contain"
+            className="w-[60%] h-[60%] rounded-full object-fill"
           />
         </div>
 
