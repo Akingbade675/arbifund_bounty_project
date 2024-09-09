@@ -1,14 +1,3 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { BrowserRouter as Router } from 'react-router-dom'
-// import { createThirdwebClient, getContract, resolveMethod } from 'thirdweb'
-// import { defineChain } from 'thirdweb/chains'
-// import { ThirdwebProvider } from 'thirdweb/react'
-
-import { StateContextProvider } from './context/index'
-import App from './App'
-import './index.css'
-
 // // create the client with your clientId, or secretKey if in a server environment
 // export const client = createThirdwebClient({
 //   clientId: '28df26bf44c5627b913f92425d208eb0',
@@ -21,12 +10,28 @@ import './index.css'
 //   address: '0xf765d07d2FD92A859a50B38631db40FBFA40312A',
 // })
 
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { BrowserRouter as Router } from 'react-router-dom'
+import { ChainId, ThirdwebProvider } from '@thirdweb-dev/react'
+
+import { StateContextProvider } from './context'
+import App from './App'
+import './index.css'
+
+const CHAINID = 421614
+
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 root.render(
-  <Router>
-    <StateContextProvider>
-      <App />
-    </StateContextProvider>
-  </Router>
+  <ThirdwebProvider
+    desiredChainId={CHAINID}
+    clientId="28df26bf44c5627b913f92425d208eb0"
+  >
+    <Router>
+      <StateContextProvider>
+        <App />
+      </StateContextProvider>
+    </Router>
+  </ThirdwebProvider>
 )
