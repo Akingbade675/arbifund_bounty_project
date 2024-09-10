@@ -4,9 +4,8 @@ import { ethers } from 'ethers'
 
 import { useStateContext } from '../context'
 import { money } from '../assets'
-import { CustomButton, FormField, Loader } from '../components'
+import { CustomButton, FormField, Loader, CustomSnackbar } from '../components'
 import { checkIfImage, handleSnackbarClose } from '../utils'
-import CustomSnackbar from '../components/SnackBar'
 
 const CreateCampaign = () => {
   const navigate = useNavigate()
