@@ -36,6 +36,13 @@ const Navbar = () => {
   const path = window.location.pathname
   return (
     <div className="flex md:flex-row flex-col-reverse justify-between mb-[35px] gap-6">
+      {/* Logo */}
+      <Link to="/" className="sm:flex hidden">
+        <h1 className="font-epilogue font-bold text-[28px] text-white tracking-[-0.5%]">
+          <span className="font-semibold text-[]">arbi</span>
+          <span className="text-[#8c6dfd]">Fundr.</span>
+        </h1>
+      </Link>
       {path === '/' && <SearchBar />}
       <div className="sm:flex hidden flex-row justify-end gap-4">
         <CustomButton

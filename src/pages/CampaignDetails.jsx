@@ -218,7 +218,7 @@ const CampaignDetails = () => {
                 btnType="button"
                 title="Fund Campaign"
                 // styles="w-full bg-[#8c6dfd]"
-                styles="w-full bg-gradient-to-r from-[#4a0e78] via-[#6a1b9a] to-[#7b1fa2]"
+                styles="w-full bg-gradient-to-r from-[#5223FCFF] to-[#8c6dfd]"
                 handleClick={handleDonate}
               />
             </div>

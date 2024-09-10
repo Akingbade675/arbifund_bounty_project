@@ -1,6 +1,6 @@
 import { logo, menu } from '../assets'
 import { navlinks } from '../constants'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useStateContext } from '../context'
 import { CustomButton } from './'
 import React, { useState } from 'react'
@@ -12,13 +12,20 @@ const SmallScreenNav = ({ toggleDrawer, setToggleDrawer, handleConnect }) => {
 
   return (
     <div className="sm:hidden flex justify-between items-center relative">
-      <div className="w-[40px] h-[40px] rounded-[10px] bg-[#2c2f32] flex justify-center items-center cursor-pointer">
+      {/* <div className="w-[40px] h-[40px] rounded-[10px] bg-[#2c2f32] flex justify-center items-center cursor-pointer">
         <img
           src={logo}
           alt="user"
           className="w-[60%] h-[60%] rounded-full object-fill"
         />
-      </div>
+      </div> */}
+      {/* Logo */}
+      <Link to="/" className="flex">
+        <h1 className="font-epilogue font-bold text-[28px] text-white tracking-[-0.5%]">
+          <span className="font-semibold text-[]">arbi</span>
+          <span className="text-[#8c6dfd]">Fundr.</span>
+        </h1>
+      </Link>
 
       <img
         src={menu}
