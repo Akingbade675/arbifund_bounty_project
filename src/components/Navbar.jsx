@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { ConnectWallet } from '@thirdweb-dev/react'
 
-import { useStateContext } from '../context/index'
+import { useStateContext } from '../context'
 import { CustomButton } from './'
 import { logo, menu, search, thirdweb } from '../assets'
 import { navlinks } from '../constants'
@@ -109,7 +110,7 @@ const Navbar = () => {
             <CustomButton
               btnType="button"
               title={address ? 'Create a campaign' : 'Connect'}
-              styles={address ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
+              styles={address ? 'bg-[#1dc071] w-full' : 'bg-[#8c6dfd] w-full'}
               handleClick={() => {
                 if (address) navigate('create-campaign')
                 else connect()

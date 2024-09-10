@@ -13,21 +13,17 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter as Router } from 'react-router-dom'
-import { ChainId, ThirdwebProvider } from '@thirdweb-dev/react'
 
 import { StateContextProvider } from './context'
 import App from './App'
 import './index.css'
-
-const CHAINID = 421614
+import './scrollbar-hide.css'
+import { ThirdwebProvider } from '@thirdweb-dev/react'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 root.render(
-  <ThirdwebProvider
-    desiredChainId={CHAINID}
-    clientId="28df26bf44c5627b913f92425d208eb0"
-  >
+  <ThirdwebProvider>
     <Router>
       <StateContextProvider>
         <App />

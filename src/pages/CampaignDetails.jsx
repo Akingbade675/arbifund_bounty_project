@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ethers } from 'ethers'
 
-import { useStateContext } from '../context/index'
+import { useStateContext } from '../context'
 import { CountBox, CustomButton, Loader } from '../components'
 import { calculateBarPercentage, daysLeft } from '../utils'
 import { thirdweb } from '../assets'
@@ -29,6 +29,10 @@ const CampaignDetails = () => {
   }, [contract, address])
 
   const handleDonate = async () => {
+    if (!address) {
+      alert('Please connect your wallet')
+      return
+    }
     setIsLoading(true)
 
     await donate(state.pId, amount)
@@ -84,7 +88,7 @@ const CampaignDetails = () => {
                 <img
                   src={thirdweb}
                   alt="user"
-                  className="w-[60%] h-[60%] object-contain"
+                  className="w-[80%] h-[80%] rounded-full object-fill"
                 />
               </div>
               <div>
@@ -107,6 +111,37 @@ const CampaignDetails = () => {
               <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px] text-justify">
                 {state.description}
               </p>
+            </div>
+          </div>
+
+          {/* New section for Category */}
+          <div>
+            <h4 className="font-epilogue font-semibold text-[18px] text-white uppercase">
+              Category
+            </h4>
+
+            <div className="mt-[20px]">
+              <p className="font-epilogue font-normal text-[16px] text-[#808191] leading-[26px]">
+                {state.category}
+              </p>
+            </div>
+          </div>
+
+          {/* New section for Link */}
+          <div>
+            <h4 className="font-epilogue font-semibold text-[18px] text-white uppercase">
+              Project Link
+            </h4>
+
+            <div className="mt-[20px]">
+              <a
+                href={state.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-epilogue font-normal text-[16px] text-[#4acd8d] leading-[26px] hover:underline"
+              >
+                {state.link}
+              </a>
             </div>
           </div>
 
@@ -151,7 +186,7 @@ const CampaignDetails = () => {
             <div className="mt-[30px]">
               <input
                 type="number"
-                placeholder="ETH 0.1"
+                placeholder="0.1 ETH"
                 step="0.01"
                 className="w-full py-[10px] sm:px-[20px] px-[15px] outline-none border-[1px] border-[#3a3a43] bg-transparent font-epilogue text-white text-[18px] leading-[30px] placeholder:text-[#4b5264] rounded-[10px]"
                 value={amount}
@@ -171,7 +206,8 @@ const CampaignDetails = () => {
               <CustomButton
                 btnType="button"
                 title="Fund Campaign"
-                styles="w-full bg-[#8c6dfd]"
+                // styles="w-full bg-[#8c6dfd]"
+                styles="w-full bg-gradient-to-r from-[#4a0e78] via-[#6a1b9a] to-[#7b1fa2]"
                 handleClick={handleDonate}
               />
             </div>
