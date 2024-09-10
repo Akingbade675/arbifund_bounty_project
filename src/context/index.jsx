@@ -21,11 +21,11 @@ export const StateContextProvider = ({ children }) => {
   }, [])
 
   const initailze = async () => {
-    if (typeof window.ethereum !== 'undefined') {
+    if (typeof window.ethereum === 'undefined') {
       // connect only to the arbitrum sepolia testnet
-      const provider = new ethers.providers.Web3Provider(window.ethereum, {
-        chainId: 421614,
-      })
+      const provider = new ethers.providers.JsonRpcProvider(
+        'https://arbitrum-sepolia.infura.io/v3/3b568232acda4b79b692133e5250782f'
+      )
       setProvider(provider)
 
       const contract = new ethers.Contract(
@@ -38,6 +38,7 @@ export const StateContextProvider = ({ children }) => {
   }
 
   const connect = async () => {
+    console.log('connecting')
     if (typeof window.ethereum !== 'undefined') {
       await window.ethereum.request({ method: 'eth_requestAccounts' })
       const provider = new ethers.providers.Web3Provider(window.ethereum, {
@@ -58,7 +59,10 @@ export const StateContextProvider = ({ children }) => {
 
       const address = await signer.getAddress()
       setAddress(address)
+      return address
     }
+
+    return null
   }
 
   const publishCampaign = async (form) => {

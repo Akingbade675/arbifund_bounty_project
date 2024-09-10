@@ -4,8 +4,14 @@ import { ethers } from 'ethers'
 
 import { useStateContext } from '../context'
 import { CountBox, CustomButton, Loader } from '../components'
-import { calculateBarPercentage, daysLeft } from '../utils'
+import {
+  calculateBarPercentage,
+  checkValidDonation,
+  daysLeft,
+  handleSnackbarClose,
+} from '../utils'
 import { thirdweb } from '../assets'
+import CustomSnackbar from '../components/SnackBar'
 
 const CampaignDetails = () => {
   const { state } = useLocation()
@@ -15,6 +21,9 @@ const CampaignDetails = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [amount, setAmount] = useState('')
   const [donators, setDonators] = useState([])
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState('')
 
   const remainingDays = daysLeft(state.deadline)
 
@@ -30,9 +39,12 @@ const CampaignDetails = () => {
 
   const handleDonate = async () => {
     if (!address) {
-      alert('Please connect your wallet')
+      setSnackbarMessage('Please connect your wallet to donate')
+      setSnackbarOpen(true)
       return
     }
+
+    checkValidDonation(amount, setSnackbarOpen, setSnackbarMessage)
     setIsLoading(true)
 
     await donate(state.pId, amount)
@@ -214,6 +226,13 @@ const CampaignDetails = () => {
           </div>
         </div>
       </div>
+
+      {/* Custom Snackbar */}
+      <CustomSnackbar
+        open={snackbarOpen}
+        message={snackbarMessage}
+        onClose={handleSnackbarClose(setSnackbarOpen)}
+      />
     </div>
   )
 }

@@ -5,12 +5,14 @@ import { ethers } from 'ethers'
 import { useStateContext } from '../context'
 import { money } from '../assets'
 import { CustomButton, FormField, Loader } from '../components'
-import { checkIfImage } from '../utils'
+import { checkIfImage, handleSnackbarClose } from '../utils'
 import CustomSnackbar from '../components/SnackBar'
 
 const CreateCampaign = () => {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState('')
   const { createCampaign } = useStateContext()
   const [form, setForm] = useState({
     name: '',
@@ -51,9 +53,21 @@ const CreateCampaign = () => {
         setIsLoading(false)
         navigate('/')
       } else {
-        ;<CustomSnackbar message="Please provide a valid image URL" />
+        setSnackbarMessage('Please provide a valid image URL')
+        setSnackbarOpen(true)
         setForm({ ...form, image: '' })
       }
+    })
+
+    setForm({
+      name: '',
+      title: '',
+      description: '',
+      target: '',
+      deadline: '',
+      image: '',
+      category: '',
+      link: '',
     })
   }
 
@@ -174,6 +188,13 @@ const CreateCampaign = () => {
           />
         </div>
       </form>
+
+      {/* Custom Snackbar */}
+      <CustomSnackbar
+        open={snackbarOpen}
+        message={snackbarMessage}
+        onClose={handleSnackbarClose(setSnackbarOpen)}
+      />
     </div>
   )
 }
