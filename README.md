@@ -1,37 +1,117 @@
+# ArbiFundr - Decentralized Crowdfunding Platform
+
+ArbiFundr is a decentralized crowdfunding platform built on the Arbitrum network, leveraging the power of blockchain technology to create transparent, efficient, and global fundraising campaigns.
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Usage](#usage)
+- [Smart Contract](#smart-contract)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+
+## Overview
+
+ArbiFundr allows users to create and contribute to fundraising campaigns for various causes, from charity and social impact projects to personal and entrepreneurial ventures. By utilizing blockchain technology, ArbiFundr ensures transparency, reduces intermediary costs, and enables global participation.
+
+## Features
+
+- Create and manage fundraising campaigns
+- Contribute to campaigns using cryptocurrency
+- Real-time tracking of campaign progress
+- Transparent fund allocation and usage
+- User-friendly interface for easy navigation and interaction
+- Integration with Arbitrum wallet for secure transactions
+- Detailed campaign analytics and reporting
+
+## Technology Stack
+
+- Frontend:
+  - React.js
+  - Tailwind CSS for styling
+  - Ethers.js for blockchain interactions
+- Backend:
+  - Smart Contract written in Rust using Arbitrum Stylus
+  - Deployed on Arbitrum Sepolia Testnet
+
 ## Getting Started
 
-Create a project using this example:
+### Prerequisites
 
-```bash
-npx thirdweb create --template vite-javascript-starter
-```
+- Node.js (v14.0.0 or later)
+- npm (v6.0.0 or later)
+- An Ethereum wallet (e.g., MetaMask) configured for Arbitrum Sepolia Testnet
 
-You can start editing the page by modifying `src/main.jsx`. The page auto-updates as you edit the file.
+### Installation
 
-On `src/index.jsx`, you'll find our `ThirdwebProvider` wrapping your app,
-this is necessary for our [hooks](https://portal.thirdweb.com/react) and
-[UI Components](https://portal.thirdweb.com/ui-components) to work.
+1. Clone the repository:
 
-### Deploy to IPFS
+   ```
+   git clone https://github.com/Akingbade675/arbifundr-frontend.git
+   ```
 
-Deploy a copy of your application to IPFS using the following command:
+2. Navigate to the project directory:
 
-```bash
-yarn deploy
-```
+   ```
+   cd arbifundr-frontend
+   ```
 
-## Learn More
+3. Install dependencies:
 
-To learn more about thirdweb, Vite and React, take a look at the following resources:
+   ```
+   npm install
+   ```
 
-- [thirdweb React Documentation](https://docs.thirdweb.com/react) - learn about our React SDK.
-- [thirdweb JavaScript Documentation](https://docs.thirdweb.com/react) - learn about our JavaScript/TypeScript SDK.
-- [thirdweb Portal](https://docs.thirdweb.com/react) - check our guides and development resources.
-- [Vite Documentation](https://vitejs.dev/guide/) - learn about Vite features.
-- [React documentation](https://reactjs.org/) - learn React.
+4. Create a `.env` file in the root directory and add the following:
 
-You can check out [the thirdweb GitHub organization](https://github.com/thirdweb-dev) - your feedback and contributions are welcome!
+   ```
+   REACT_APP_CONTRACT_ADDRESS=your_deployed_contract_address
+   REACT_APP_RPC_URL=https://sepolia-rollup.arbitrum.io/rpc
+   ```
 
-## Join our Discord!
+5. Start the development server:
+   ```
+   npm start
+   ```
 
-For any questions, suggestions, join our discord at [https://discord.gg/thirdweb](https://discord.gg/thirdweb).
+## Usage
+
+1. Connect your Arbitrum-compatible wallet (e.g., MetaMask configured for Arbitrum Sepolia).
+2. Browse existing campaigns or create a new one.
+3. To create a campaign, fill in the required details and set your funding goal.
+4. To contribute to a campaign, select the desired amount and confirm the transaction.
+5. Track the progress of campaigns you've created or contributed to in your profile.
+
+## Smart Contract
+
+The backend smart contract for ArbiFundr is written in Rust using Arbitrum Stylus and deployed on the Arbitrum Sepolia Testnet.
+
+- **Contract Address**: `0xc40D6Ce7bF33E92E389e3A9208228941F0748116`
+- **Arbitrum Sepolia Explorer Link**: [View Contract on Arbitrum Sepolia Explorer](https://sepolia-explorer.arbitrum.io/address/0xc40D6Ce7bF33E92E389e3A9208228941F0748116)
+
+For more details on the smart contract implementation and ABI, please refer to the [arbifundr-contract](https://github.com/Akingbade675/arbiFund_smart_contract) repository.
+
+## Contributing
+
+We welcome contributions to ArbiFundr! Please follow these steps to contribute:
+
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature/AmazingFeature`)
+3. Make your changes
+4. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+5. Push to the branch (`git push origin feature/AmazingFeature`)
+6. Open a Pull Request
+
+## License
+
+This project is licensed under the Apache License - see the [LICENSE](https://github.com/Akingbade675/arbifund_bounty_project/LICENSE.md) file for details.
+
+---
+
+Thank you for your interest in ArbiFundr! We're excited to see how this platform can revolutionize crowdfunding through blockchain technology.
