@@ -5,12 +5,35 @@ import { useStateContext } from '../context'
 import { CustomButton } from './'
 import { logo, menu, search, thirdweb } from '../assets'
 import { navlinks } from '../constants'
+import CustomSnackbar from './SnackBar'
+import { handleSnackbarClose } from '../utils'
 
 const Navbar = () => {
   const navigate = useNavigate()
   const [isActive, setIsActive] = useState('dashboard')
   const [toggleDrawer, setToggleDrawer] = useState(false)
   const { connect, address } = useStateContext()
+
+  // State for managing the Snackbar
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState('')
+
+  const handleConnect = () => {
+    if (address) {
+      navigate('create-campaign')
+    } else {
+      connect().then((value) => {
+        if (!value) {
+          // Show snackbar if connection fails
+          setSnackbarMessage(
+            'Failed to connect wallet. Please install Metamask extension'
+          )
+          setToggleDrawer(false)
+          setSnackbarOpen(true)
+        }
+      })
+    }
+  }
 
   return (
     <div className="flex md:flex-row flex-col-reverse justify-between mb-[35px] gap-6">
@@ -35,10 +58,7 @@ const Navbar = () => {
           btnType="button"
           title={address ? 'Create a campaign' : 'Connect'}
           styles={address ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
-          handleClick={() => {
-            if (address) navigate('create-campaign')
-            else connect()
-          }}
+          handleClick={handleConnect}
         />
 
         <Link to="/profile">
@@ -110,14 +130,18 @@ const Navbar = () => {
               btnType="button"
               title={address ? 'Create a campaign' : 'Connect'}
               styles={address ? 'bg-[#1dc071] w-full' : 'bg-[#8c6dfd] w-full'}
-              handleClick={() => {
-                if (address) navigate('create-campaign')
-                else connect()
-              }}
+              handleClick={handleConnect}
             />
           </div>
         </div>
       </div>
+
+      {/* Custom Snackbar */}
+      <CustomSnackbar
+        open={snackbarOpen}
+        message={snackbarMessage}
+        onClose={handleSnackbarClose(setSnackbarOpen)}
+      />
     </div>
   )
 }
