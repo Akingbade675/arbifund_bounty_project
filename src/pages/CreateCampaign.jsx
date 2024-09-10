@@ -12,7 +12,7 @@ const CreateCampaign = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
-  const { createCampaign } = useStateContext()
+  const { createCampaign, address } = useStateContext()
   const [form, setForm] = useState({
     name: '',
     title: '',
@@ -45,6 +45,12 @@ const CreateCampaign = () => {
     checkIfImage(form.image, async (exists) => {
       if (exists) {
         setIsLoading(true)
+        if (!address) {
+          setSnackbarMessage('Please connect your wallet to create a campaign')
+          setSnackbarOpen(true)
+          setIsLoading(false)
+          return
+        }
         await createCampaign({
           ...form,
           target: ethers.utils.parseUnits(form.target, 18),
@@ -118,6 +124,7 @@ const CreateCampaign = () => {
             </label>
             <select
               id="category"
+              required
               value={form.category}
               onChange={(e) => handleFormFieldChange('category', e)}
               className="py-[15px] sm:px-[25px] px-[15px] outline-none border-[1px] border-[#3a3a43] bg-transparent font-epilogue text-white text-[14px] placeholder:text-[#4b5264] rounded-[10px] sm:min-w-[300px]"

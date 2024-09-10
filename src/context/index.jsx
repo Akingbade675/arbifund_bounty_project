@@ -88,20 +88,14 @@ export const StateContextProvider = ({ children }) => {
       const data = await contract.getCampaigns()
       const parsedCampaigns = data.map((campaign, i) => {
         console.log(campaign)
-        let deadline
-        if (i === 0) {
-          deadline = new Date('2024-09-29').getTime()
-        } else {
-          deadline = campaign[6].toNumber()
-        }
         return {
           owner: campaign[0],
           title: campaign[1],
           description: campaign[2],
-          category: campaign[3],
+          category: campaign[3] === '' ? 'Technology' : campaign[3], // This is a fallback in case the category is not set
           link: campaign[4],
           target: ethers.utils.formatEther(campaign[5]),
-          deadline: deadline,
+          deadline: campaign[6].toNumber(),
           amountCollected: ethers.utils.formatEther(campaign[7]),
           image: campaign[8],
           pId: i,
@@ -109,7 +103,7 @@ export const StateContextProvider = ({ children }) => {
       })
       return parsedCampaigns
     } catch (error) {
-      console.log(error, error)
+      console.log('error', error)
     }
   }
 
