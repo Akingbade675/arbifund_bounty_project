@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { ethers } from 'ethers'
 
 import { useStateContext } from '../context'
-import { CountBox, CustomButton, Loader } from '../components'
+import { CountBox, CustomButton, Loader, CustomSnackbar } from '../components'
 import {
   calculateBarPercentage,
   checkValidDonation,
@@ -11,7 +11,6 @@ import {
   handleSnackbarClose,
 } from '../utils'
 import { thirdweb } from '../assets'
-import CustomSnackbar from '../components/SnackBar'
 
 const CampaignDetails = () => {
   const { state } = useLocation()
