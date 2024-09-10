@@ -18,16 +18,13 @@ import { StateContextProvider } from './context'
 import App from './App'
 import './index.css'
 import './scrollbar-hide.css'
-import { ThirdwebProvider } from '@thirdweb-dev/react'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 root.render(
-  <ThirdwebProvider>
-    <Router>
-      <StateContextProvider>
-        <App />
-      </StateContextProvider>
-    </Router>
-  </ThirdwebProvider>
+  <Router>
+    <StateContextProvider>
+      <App />
+    </StateContextProvider>
+  </Router>
 )
