@@ -4,10 +4,16 @@ import { useNavigate, Link } from 'react-router-dom'
 import { useStateContext } from '../context'
 import { CustomButton } from './'
 import React, { useState } from 'react'
+import { useWeb3Modal, useWeb3ModalState } from '@web3modal/ethers/react'
+import { formatAddress } from '../utils'
 
-const SmallScreenNav = ({ toggleDrawer, setToggleDrawer, handleConnect }) => {
+const SmallScreenNav = ({ handleConnect }) => {
   const navigate = useNavigate()
   const [isActive, setIsActive] = useState('dashboard')
+  const [toggleDrawer, setToggleDrawer] = useState(false)
+  const { open, close } = useWeb3Modal()
+  const { open: isOpen } = useWeb3ModalState()
+
   const { address } = useStateContext()
 
   return (
@@ -68,12 +74,35 @@ const SmallScreenNav = ({ toggleDrawer, setToggleDrawer, handleConnect }) => {
           ))}
         </ul>
 
-        <div className="flex mx-4">
+        <div className="flex flex-col mx-4 gap-4">
+          {address && (
+            <CustomButton
+              btnType="button"
+              title={'Create Campaign'}
+              styles={'bg-[#1dc071] w-full'}
+              handleClick={() => {
+                setToggleDrawer(false)
+                navigate('/create-campaign')
+              }}
+            />
+          )}
           <CustomButton
             btnType="button"
-            title={address ? 'Create a campaign' : 'Connect'}
-            styles={address ? 'bg-[#1dc071] w-full' : 'bg-[#8c6dfd] w-full'}
-            handleClick={handleConnect}
+            title={
+              isOpen
+                ? 'Connecting...'
+                : address
+                ? formatAddress(address)
+                : 'Connect Wallet'
+            }
+            styles={
+              address || isOpen
+                ? 'bg-[#28282f] w-full rounded-[10px] text-[#868E91FF] min-h-[40px] px-2 border border-[#4F4F58FF]'
+                : 'bg-[#8c6dfd] w-full min-h-[48px] px-3'
+            }
+            handleClick={() => {
+              open()
+            }}
           />
         </div>
       </div>

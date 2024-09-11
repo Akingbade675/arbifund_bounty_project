@@ -39,3 +39,7 @@ export const handleSnackbarClose = (callback) => {
     callback(false)
   }
 }
+
+export const formatAddress = (address) => {
+  return `${address.slice(0, 4)}...${address.slice(-6)}`
+}

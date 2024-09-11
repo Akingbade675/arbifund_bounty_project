@@ -53,7 +53,7 @@ const CreateCampaign = () => {
         }
         await createCampaign({
           ...form,
-          target: ethers.utils.parseUnits(form.target, 18),
+          target: ethers.parseUnits(form.target, 18),
         })
         setIsLoading(false)
         navigate('/')

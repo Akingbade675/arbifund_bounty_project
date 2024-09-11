@@ -1,14 +1,19 @@
 import React, { useContext, createContext, useState, useEffect } from 'react'
+import {
+  useWeb3ModalProvider,
+  useWeb3ModalAccount,
+  useSwitchNetwork,
+} from '@web3modal/ethers/react'
 import { ethers } from 'ethers'
 import arbiFundABI from '../arbiFundABI.json'
 
 const StateContext = createContext()
 
 export const StateContextProvider = ({ children }) => {
-  const [provider, setProvider] = useState(null)
-  const [signer, setSigner] = useState(null)
   const [contract, setContract] = useState(null)
-  const [address, setAddress] = useState(null)
+  const { address, isConnected, chainId } = useWeb3ModalAccount()
+  const { walletProvider } = useWeb3ModalProvider()
+  const { switchNetwork } = useSwitchNetwork()
 
   const contractAddress = '0xc40D6Ce7bF33E92E389e3A9208228941F0748116'
 
@@ -21,38 +26,32 @@ export const StateContextProvider = ({ children }) => {
   }, [])
 
   const initailze = async () => {
-    const provider = new ethers.providers.JsonRpcProvider(
-      'https://arbitrum-sepolia.infura.io/v3/3b568232acda4b79b692133e5250782f'
+    const provider = new ethers.JsonRpcProvider(
+      'https://arbitrum-sepolia.infura.io/v3/3b568232acda4b79b692133e5250782f',
+      {
+        chainId: 421614,
+        name: 'arbitrumSepolia',
+      }
     )
-    setProvider(provider)
 
     const contract = new ethers.Contract(contractAddress, arbiFundABI, provider)
     setContract(contract)
   }
 
-  const connect = async () => {
+  const signContract = async () => {
     console.log('connecting')
-    if (typeof window.ethereum !== 'undefined') {
-      await window.ethereum.request({ method: 'eth_requestAccounts' })
-      const provider = new ethers.providers.Web3Provider(window.ethereum, {
-        chainId: 421614,
-      })
-      setProvider(provider)
+    if (isConnected) {
+      const ethersProvider = new ethers.BrowserProvider(walletProvider)
+      const signer = await ethersProvider.getSigner()
+      console.log('signer', signer)
 
-      const signer = provider.getSigner()
-      const chainId = await signer.getChainId()
-      if (chainId !== 421614) {
-        alert('Please connect to the Arbitrum Sepolia testnet')
-        return
-      }
-      setSigner(signer)
+      if (chainId !== 421614) await switchNetwork(421614)
 
       const contract = new ethers.Contract(contractAddress, arbiFundABI, signer)
       setContract(contract)
+      console.log('contract', contract)
 
-      const address = await signer.getAddress()
-      setAddress(address)
-      return address
+      return contract
     }
 
     return null
@@ -60,13 +59,15 @@ export const StateContextProvider = ({ children }) => {
 
   const publishCampaign = async (form) => {
     try {
-      if (!signer) {
-        await connect()
+      if (!isConnected) {
+        alert('Please connect to a wallet')
+        return
       }
 
-      const address = provider.getSigner().getAddress()
+      const w3Contract = await signContract()
+      console.log('Signing transaction', w3Contract)
 
-      const data = await contract.createCampaign(
+      const data = await w3Contract.createCampaign(
         address,
         form.title,
         form.description,
@@ -94,9 +95,9 @@ export const StateContextProvider = ({ children }) => {
           description: campaign[2],
           category: campaign[3] === '' ? 'Technology' : campaign[3], // This is a fallback in case the category is not set
           link: campaign[4],
-          target: ethers.utils.formatEther(campaign[5]),
-          deadline: campaign[6].toNumber(),
-          amountCollected: ethers.utils.formatEther(campaign[7]),
+          target: ethers.formatEther(campaign[5]),
+          deadline: Number(campaign[6]),
+          amountCollected: ethers.formatEther(campaign[7]),
           image: campaign[8],
           pId: i,
         }
@@ -117,11 +118,15 @@ export const StateContextProvider = ({ children }) => {
 
   const donate = async (pId, amount) => {
     try {
-      if (!signer) {
-        await connect()
+      if (!isConnected) {
+        alert('Please connect to a wallet')
+        return
       }
-      const data = await contract.donateToCampaign(pId, {
-        value: ethers.utils.parseEther(amount),
+
+      const w3Contract = await signContract()
+
+      const data = await w3Contract.donateToCampaign(pId, {
+        value: ethers.parseEther(amount),
       })
       await data.wait()
       return data
@@ -138,7 +143,7 @@ export const StateContextProvider = ({ children }) => {
     for (let i = 0; i < numberOfDonations; i++) {
       parsedDonations.push({
         donator: donations[0][i],
-        donation: ethers.utils.formatEther(donations[1][i]),
+        donation: ethers.formatEther(donations[1][i]),
       })
     }
 
@@ -149,8 +154,8 @@ export const StateContextProvider = ({ children }) => {
     <StateContext.Provider
       value={{
         address,
+        isConnected,
         contract,
-        connect,
         createCampaign: publishCampaign,
         getCampaigns,
         getUserCampaigns,

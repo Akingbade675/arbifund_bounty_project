@@ -9,7 +9,6 @@ import { handleSnackbarClose } from '../utils'
 
 const Navbar = () => {
   const navigate = useNavigate()
-  const [toggleDrawer, setToggleDrawer] = useState(false)
   const { connect, address } = useStateContext()
 
   // State for managing the Snackbar
@@ -17,20 +16,20 @@ const Navbar = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('')
 
   const handleConnect = () => {
-    if (address) {
-      navigate('create-campaign')
-    } else {
-      connect().then((value) => {
-        if (!value) {
-          // Show snackbar if connection fails
-          setSnackbarMessage(
-            'Failed to connect wallet. Please install Metamask extension'
-          )
-          setToggleDrawer(false)
-          setSnackbarOpen(true)
-        }
-      })
-    }
+    // if (address) {
+    //   navigate('create-campaign')
+    // } else {
+    //   connect().then((value) => {
+    //     if (!value) {
+    //       // Show snackbar if connection fails
+    //       setSnackbarMessage(
+    //         'Failed to connect wallet. Please install Metamask extension'
+    //       )
+    //       setToggleDrawer(false)
+    //       setSnackbarOpen(true)
+    //     }
+    //   })
+    // }
   }
 
   const path = window.location.pathname
@@ -45,29 +44,36 @@ const Navbar = () => {
       </Link>
       {path === '/' && <SearchBar />}
       <div className="sm:flex hidden flex-row justify-end gap-4">
-        <CustomButton
-          btnType="button"
-          title={address ? 'Create a campaign' : 'Connect'}
-          styles={address ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
-          handleClick={handleConnect}
+        {/* {address && (
+          <CustomButton
+            btnType="button"
+            title="Create a campaign"
+            styles="bg-[#1dc071]"
+            handleClick={handleConnect}
+          />
+        )} */}
+
+        <w3m-button
+          color="#1dc071"
+          balance="hide"
+          size="md"
+          onClick={() => {
+            console.log('clicked')
+          }}
         />
 
         <Link to="/profile">
-          <div className="w-[52px] h-[52px] rounded-full bg-[#2c2f32] flex justify-center items-center cursor-pointer">
+          <div className="w-[48px] h-[48px] rounded-full bg-[#2c2f32] flex justify-center items-center cursor-pointer">
             <img
               src={thirdweb}
               alt="user"
-              className="w-[60%] h-[60%] rounded-full object-cover"
+              className="w-[70%] h-[70%] rounded-full object-cover"
             />
           </div>
         </Link>
       </div>
       {/* Small screen navigation */}
-      <SmallScreenNav
-        toggleDrawer={toggleDrawer}
-        setToggleDrawer={setToggleDrawer}
-        handleConnect={handleConnect}
-      />
+      <SmallScreenNav handleConnect={handleConnect} />
 
       {/* Custom Snackbar */}
       <CustomSnackbar
