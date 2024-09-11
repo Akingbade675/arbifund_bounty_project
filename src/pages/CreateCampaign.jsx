@@ -5,7 +5,8 @@ import { ethers } from 'ethers'
 import { useStateContext } from '../context'
 import { money } from '../assets'
 import { CustomButton, FormField, Loader, CustomSnackbar } from '../components'
-import { checkIfImage, handleSnackbarClose } from '../utils'
+import { handleSnackbarClose } from '../utils'
+import { uploadImageToFirebase } from '../firebase'
 
 const CreateCampaign = () => {
   const navigate = useNavigate()
@@ -19,7 +20,7 @@ const CreateCampaign = () => {
     description: '',
     target: '',
     deadline: '',
-    image: '',
+    image: null,
     category: '',
     link: '',
   })
@@ -36,33 +37,40 @@ const CreateCampaign = () => {
   ]
 
   const handleFormFieldChange = (fieldName, e) => {
-    setForm({ ...form, [fieldName]: e.target.value })
+    if (fieldName === 'image') {
+      setForm({ ...form, [fieldName]: e.target.files[0] })
+    } else {
+      setForm({ ...form, [fieldName]: e.target.value })
+    }
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    checkIfImage(form.image, async (exists) => {
-      if (exists) {
-        setIsLoading(true)
-        if (!address) {
-          setSnackbarMessage('Please connect your wallet to create a campaign')
-          setSnackbarOpen(true)
-          setIsLoading(false)
-          return
-        }
-        await createCampaign({
-          ...form,
-          target: ethers.parseUnits(form.target, 18),
-        })
-        setIsLoading(false)
-        navigate('/')
-      } else {
-        setSnackbarMessage('Please provide a valid image URL')
-        setSnackbarOpen(true)
-        setForm({ ...form, image: '' })
-      }
+    setIsLoading(true)
+    if (!address) {
+      setSnackbarMessage('Please connect your wallet to create a campaign')
+      setSnackbarOpen(true)
+      setIsLoading(false)
+      return
+    }
+
+    if (!form.image) {
+      setSnackbarMessage('Please provide an image for your campaign')
+      setSnackbarOpen(true)
+      setIsLoading(false)
+      return
+    }
+
+    const imageUrl = await uploadImageToFirebase(form.image)
+
+    await createCampaign({
+      ...form,
+      image: imageUrl,
+      target: ethers.parseUnits(form.target, 18),
     })
+    setIsLoading(false)
+    navigate('/')
 
     setForm({
       name: '',
@@ -169,13 +177,29 @@ const CreateCampaign = () => {
           />
         </div>
 
-        <FormField
+        {/* <FormField
           labelName="Campaign image *"
           placeholder="Place image URL of your campaign"
           inputType="url"
           value={form.image}
           handleChange={(e) => handleFormFieldChange('image', e)}
-        />
+        /> */}
+
+        <div className="flex flex-col">
+          <label
+            htmlFor="image"
+            className="font-epilogue font-medium text-[14px] leading-[22px] text-[#808191] mb-[10px]"
+          >
+            Campaign image *
+          </label>
+          <input
+            id="image"
+            type="file"
+            accept="image/*"
+            onChange={(e) => handleFormFieldChange('image', e)}
+            className="py-[15px] sm:px-[25px] px-[15px] outline-none border-[1px] border-[#3a3a43] bg-transparent font-epilogue text-white text-[14px] placeholder:text-[#4b5264] rounded-[10px] sm:min-w-[300px]"
+          />
+        </div>
 
         <FormField
           labelName="Relevant Link"
