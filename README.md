@@ -1,6 +1,7 @@
 # ArbiFundr - Decentralized Crowdfunding Platform
 
 ArbiFundr is a decentralized crowdfunding platform built on the Arbitrum network, leveraging the power of blockchain technology to create transparent, efficient, and global fundraising campaigns.
+[Link to website](https://arbifund.netlify.app)
 
 ## Table of Contents
 
